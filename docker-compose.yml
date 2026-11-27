@@ -1,0 +1,7 @@
+services:
+  web-game:
+    build: .
+    container_name: bomb-man-game
+    ports:
+      - "80:80"
+    restart: unless-stopped

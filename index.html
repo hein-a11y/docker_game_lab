@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bomb Man - Docker Arcade</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="top-bar">
+      <div class="brand">
+        <span class="brand-icon" aria-hidden="true">💣</span>
+        <div>
+          <h1>BOMB MAN</h1>
+          <p class="subtitle">Dockerized Arcade Arena &bull; Port 80</p>
+        </div>
+      </div>
+
+      <div class="controls-bar">
+        <label class="control-group">
+          <span>Mode</span>
+          <select id="mode-select">
+            <option value="1p-bots">1P vs 3 AI Bots</option>
+            <option value="2p-bots">2P + 2 AI Bots</option>
+            <option value="2p-duel">2P Duel (1v1)</option>
+          </select>
+        </label>
+
+        <label class="control-group">
+          <span>AI</span>
+          <select id="ai-select">
+            <option value="normal">Normal</option>
+            <option value="hard">Hard</option>
+          </select>
+        </label>
+
+        <button id="btn-new-match" class="btn btn-primary">New Match</button>
+        <button id="btn-pause" class="btn btn-secondary">Pause</button>
+        <button id="btn-sound" class="btn btn-secondary" aria-pressed="true">Sound: On</button>
+      </div>
+    </header>
+
+    <main class="arena-layout">
+      <section class="board-panel">
+        <div class="round-banner">
+          <span>Round <strong id="round-num">1</strong></span>
+          <span>First to <strong id="target-wins">3</strong> wins</span>
+          <span class="timer-pill">Time <strong id="round-timer">02:30</strong></span>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="game" width="660" height="572"></canvas>
+
+          <div id="overlay" class="overlay hidden" role="dialog" aria-live="polite">
+            <div class="overlay-card">
+              <h2 id="overlay-title">Round Complete</h2>
+              <p id="overlay-desc">Player 1 wins the round!</p>
+              <div class="overlay-actions">
+                <button id="btn-overlay-action" class="btn btn-primary">Next Round</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <section class="card">
+          <h2>Players</h2>
+          <div id="players-hud" class="players-hud"></div>
+        </section>
+
+        <section class="card">
+          <h2>Controls</h2>
+          <ul class="key-list">
+            <li>
+              <span class="badge p1">P1</span>
+              <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> Move &bull; <kbd>Space</kbd> Bomb</span>
+            </li>
+            <li id="p2-controls-row">
+              <span class="badge p2">P2</span>
+              <span><kbd>Arrows</kbd> Move &bull; <kbd>Enter</kbd> Bomb</span>
+            </li>
+            <li>
+              <span class="badge sys">SYS</span>
+              <span><kbd>P</kbd> Pause &bull; <kbd>R</kbd> Restart Round</span>
+            </li>
+          </ul>
+          <p class="tip">Tip: In 1P mode, both <kbd>WASD</kbd> and <kbd>Arrow Keys</kbd> control Player 1.</p>
+        </section>
+
+        <section class="card">
+          <h2>Power-Ups</h2>
+          <ul class="powerup-list">
+            <li><span class="pu-chip pu-bomb">B+</span><span><strong>Bomb Up</strong> — +1 active bomb</span></li>
+            <li><span class="pu-chip pu-fire">F+</span><span><strong>Fire Up</strong> — +1 blast range</span></li>
+            <li><span class="pu-chip pu-speed">S+</span><span><strong>Speed Up</strong> — move faster</span></li>
+            <li><span class="pu-chip pu-shield">SH</span><span><strong>Shield</strong> — blocks 1 explosion</span></li>
+          </ul>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
