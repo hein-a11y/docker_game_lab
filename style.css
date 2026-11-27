@@ -4,11 +4,8 @@
   --panel-border: #1e293b;
   --text: #f8fafc;
   --muted: #94a3b8;
-  --accent: #38bdf8;
-  --accent-strong: #0ea5e9;
-  --danger: #f43f5e;
-  --warning: #f59e0b;
-  --success: #22c55e;
+  --accent: #facc15;
+  --primary: #38bdf8;
 }
 
 * {
@@ -18,7 +15,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(circle at top, #172554 0%, var(--bg) 60%);
+  background: radial-gradient(circle at top, #172554 0%, var(--bg) 65%);
   color: var(--text);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   display: flex;
@@ -35,7 +32,7 @@ body {
 }
 
 .top-bar {
-  background: rgba(17, 28, 51, 0.9);
+  background: rgba(17, 28, 51, 0.92);
   border: 1px solid var(--panel-border);
   border-radius: 12px;
   padding: 12px 16px;
@@ -115,7 +112,7 @@ select {
 }
 
 .btn-primary {
-  background: var(--accent);
+  background: var(--primary);
   color: #082f49;
 }
 
@@ -123,6 +120,10 @@ select {
   background: #1e293b;
   color: var(--text);
   border: 1px solid #334155;
+}
+
+.btn.hidden {
+  display: none;
 }
 
 .arena-layout {
@@ -133,7 +134,7 @@ select {
 }
 
 .board-panel {
-  background: rgba(17, 28, 51, 0.9);
+  background: rgba(17, 28, 51, 0.92);
   border: 1px solid var(--panel-border);
   border-radius: 12px;
   padding: 14px;
@@ -145,8 +146,10 @@ select {
 
 .round-banner {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
   font-size: 14px;
   color: var(--muted);
   padding: 0 4px;
@@ -154,6 +157,19 @@ select {
 
 .round-banner strong {
   color: var(--text);
+}
+
+.round-banner em {
+  font-style: normal;
+  color: #cbd5e1;
+}
+
+.status-hidden {
+  color: #94a3b8 !important;
+}
+
+.status-open {
+  color: #facc15 !important;
 }
 
 .timer-pill {
@@ -176,18 +192,18 @@ canvas {
   max-width: 660px;
   height: auto;
   aspect-ratio: 660 / 572;
-  background: #162033;
-  border: 2px solid #334155;
-  border-radius: 10px;
+  background: #177a17;
+  border: 3px solid #4b5563;
+  border-radius: 8px;
   display: block;
 }
 
 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(11, 17, 32, 0.78);
-  backdrop-filter: blur(4px);
-  border-radius: 10px;
+  background: rgba(11, 17, 32, 0.72);
+  backdrop-filter: blur(3px);
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -200,13 +216,13 @@ canvas {
 
 .overlay-card {
   background: #0f172a;
-  border: 1px solid #38bdf8;
+  border: 2px solid var(--accent);
   border-radius: 12px;
-  padding: 22px 28px;
+  padding: 22px 26px;
   text-align: center;
-  max-width: 360px;
+  max-width: 390px;
   width: 100%;
-  box-shadow: 0 0 32px rgba(56, 189, 248, 0.25);
+  box-shadow: 0 0 32px rgba(250, 204, 21, 0.2);
 }
 
 .overlay-card h2 {
@@ -216,8 +232,15 @@ canvas {
 
 .overlay-card p {
   margin: 0 0 18px;
-  color: #cbd5e1;
-  line-height: 1.4;
+  color: #e2e8f0;
+  line-height: 1.45;
+}
+
+.overlay-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .sidebar {
@@ -227,7 +250,7 @@ canvas {
 }
 
 .card {
-  background: rgba(17, 28, 51, 0.9);
+  background: rgba(17, 28, 51, 0.92);
   border: 1px solid var(--panel-border);
   border-radius: 12px;
   padding: 14px;
@@ -235,62 +258,54 @@ canvas {
 
 .card h2 {
   margin: 0 0 10px;
-  font-size: 15px;
+  font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--muted);
 }
 
-.players-hud {
-  display: flex;
-  flex-direction: column;
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
+  margin-bottom: 10px;
 }
 
-.player-row {
+.stat-box {
   background: #0f172a;
   border: 1px solid #1e293b;
   border-radius: 8px;
   padding: 8px 10px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
-.player-row.eliminated {
-  opacity: 0.5;
-}
-
-.player-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.player-name {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.swatch {
-  width: 11px;
-  height: 11px;
-  border-radius: 3px;
-  display: inline-block;
-}
-
-.player-stats {
-  display: flex;
-  gap: 10px;
-  font-size: 12px;
+.stat-box span {
+  font-size: 11px;
   color: var(--muted);
+  text-transform: uppercase;
 }
 
-.key-list,
-.powerup-list {
+.stat-box strong {
+  font-size: 18px;
+  color: var(--text);
+}
+
+.power-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  font-size: 12px;
+  color: #cbd5e1;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.enemy-list,
+.key-list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -300,63 +315,34 @@ canvas {
   font-size: 13px;
 }
 
-.key-list li,
-.powerup-list li {
+.enemy-list li {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
 }
 
-.badge {
-  font-size: 11px;
-  font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 5px;
-  min-width: 34px;
-  text-align: center;
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
-.badge.p1 { background: #38bdf8; color: #082f49; }
-.badge.p2 { background: #f43f5e; color: #fff; }
-.badge.sys { background: #334155; color: #f8fafc; }
+.dot.balloon { background: #f97316; }
+.dot.ice { background: #38bdf8; }
+.dot.ghost { background: #ef4444; }
+.dot.coin { background: #eab308; }
 
 kbd {
   background: #0f172a;
   border: 1px solid #475569;
   border-radius: 4px;
-  padding: 1px 5px;
+  padding: 1px 6px;
   font-size: 11px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   color: #e2e8f0;
   margin-right: 2px;
 }
-
-.tip {
-  margin: 10px 0 0;
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.tip.hidden {
-  display: none;
-}
-
-.pu-chip {
-  width: 26px;
-  height: 22px;
-  border-radius: 5px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 800;
-  flex-shrink: 0;
-}
-
-.pu-bomb { background: #0284c7; color: #fff; }
-.pu-fire { background: #ea580c; color: #fff; }
-.pu-speed { background: #16a34a; color: #fff; }
-.pu-shield { background: #9333ea; color: #fff; }
 
 @media (max-width: 960px) {
   .arena-layout {
