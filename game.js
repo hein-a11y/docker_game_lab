@@ -646,15 +646,15 @@
     const speed = BASE_SPEED + player.speedTier * SPEED_STEP;
     const secPerTile = TILE / speed;
 
-    const dirs = [
+    const baseDirs = [
       { dc: 1, dr: 0 },
       { dc: -1, dr: 0 },
       { dc: 0, dr: 1 },
       { dc: 0, dr: -1 },
     ];
-
-    // Shuffle tie-break order slightly so bots feel natural
-    if (Math.random() < 0.5) dirs.reverse();
+    // Deterministic per-player direction rotation avoids per-frame oscillation on ties
+    const rot = player.id % 4;
+    const dirs = baseDirs.slice(rot).concat(baseDirs.slice(0, rot));
 
     while (queue.length > 0) {
       const cur = queue.shift();
@@ -671,9 +671,8 @@
 
         const arrivalTime = (cur.dist + 1) * secPerTile;
         const tileDanger = danger[nr][nc];
-        if (tileDanger <= arrivalTime + avoidDangerThreshold && tileDanger < Infinity) {
-          // Allow stepping out of immediate blast only if this tile explodes later than arrival
-          if (tileDanger <= arrivalTime + 0.12) continue;
+        if (tileDanger < Infinity && tileDanger <= arrivalTime + avoidDangerThreshold) {
+          continue;
         }
 
         visited.add(key);
@@ -759,12 +758,11 @@
     }
 
     // 2. Check if placing a bomb right here hits a crate or enemy AND leaves an escape route
-    const aligned = Math.abs(player.x - center.x) < 10 && Math.abs(player.y - center.y) < 10;
+    const aligned = Math.abs(player.x - center.x) < 12 && Math.abs(player.y - center.y) < 12;
     const goodTarget =
       enemyInBlastLine(col, row, player.range, player.id) || hasAdjacentCrate(col, row);
 
     if (
-      aligned &&
       goodTarget &&
       player.aiBombCooldown <= 0 &&
       player.activeBombs < player.maxBombs &&
@@ -785,8 +783,14 @@
         0.35
       );
       if (escape && escape.dir) {
+        if (!aligned) {
+          const dx = Math.abs(center.x - player.x) > 3 ? Math.sign(center.x - player.x) : 0;
+          const dy = Math.abs(center.y - player.y) > 3 ? Math.sign(center.y - player.y) : 0;
+          movePlayer(player, dx, dy, dt);
+          return;
+        }
         placeBomb(player);
-        player.aiBombCooldown = isHard ? 0.55 : 1.1;
+        player.aiBombCooldown = isHard ? 0.55 : 1.05;
         movePlayer(player, escape.dir.dx, escape.dir.dy, dt);
         return;
       }
@@ -814,8 +818,7 @@
       danger,
       (c, r) =>
         danger[r][c] === Infinity &&
-        (hasAdjacentCrate(c, r) ||
-          (isHard && enemyInBlastLine(c, r, player.range, player.id))),
+        (hasAdjacentCrate(c, r) || enemyInBlastLine(c, r, player.range, player.id)),
       0.55
     );
     if (huntStep && huntStep.dir) {
