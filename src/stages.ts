@@ -43,7 +43,7 @@ export const ENEMY_SPECS: Record<EnemyType, EnemySpec> = {
     speed: 128,
     points: 800,
     color: '#eab308',
-    phasesCrates: true,
+    phasesCrates: false,
     chaseRange: 99,
     dodgesBombs: true,
   },
